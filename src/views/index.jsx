@@ -1,3 +1,3 @@
-import Login from "./login";
+import Index from "./store/store";
 
-export default Login;
+export default Index;

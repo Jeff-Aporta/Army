@@ -47,15 +47,9 @@ function Index() {
     setLoading(true);
     setTimeout(() => {
       try {
-        // First check if we have products, if not seed the database
-        let loadedProducts = getAllProducts();
-        
-        if (loadedProducts.length === 0) {
-          // Seed the database with sample products
-          loadedProducts = seedDatabase();
-          showNotification("Base de datos inicializada con productos de prueba", "info");
-        }
-        
+        // Database is now initialized in templates.jsx
+        // Just get all products here
+        const loadedProducts = getAllProducts();
         setProducts(loadedProducts);
       } catch (error) {
         console.error("Error loading products:", error);
@@ -63,7 +57,7 @@ function Index() {
       } finally {
         setLoading(false);
       }
-    }, 500); // Simulated loading delay
+    }, 200); // Reduced loading delay since init is done elsewhere
   };
 
   const handleAddProduct = () => {

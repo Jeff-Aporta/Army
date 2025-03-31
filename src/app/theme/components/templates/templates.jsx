@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 
 import "@theme/scss/main.scss";
 
@@ -11,6 +11,7 @@ import { bgdefault, portal, bgwebp } from "./back-texture";
 import { Toaster } from "react-hot-toast";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
+import toast from "react-hot-toast";
 
 import CursorLight from "@components/Fx/cursor-light";
 import Footer from "@components/templates/menu/footer";
@@ -26,6 +27,8 @@ import {
 } from "@jeff-aporta/theme-manager";
 
 import { ThreeBackground } from "@components/templates/mesh";
+import { getAllProducts } from "@app/db/services/productService";
+import { seedDatabase } from "@app/db/seedData";
 
 const minH = "min-h-80vh";
 
@@ -52,6 +55,38 @@ function Notifier({ children }) {
 function ThemeSwitcher({ children, urlShader, bgtype = "1", bgstyle={}, h_init = "0", h_fin = "0" }) {
   const [theme_name, updateThemeName] = useState(getThemeName());
   const [theme_luminance, updateThemeLuminance] = useState(getThemeLuminance());
+  const [loading, setLoading] = useState(false);
+
+  const loadProducts = () => {
+    setLoading(true);
+    setTimeout(() => {
+      try {
+        // First check if we have products, if not seed the database
+        let loadedProducts = getAllProducts();
+        
+        if (loadedProducts.length === 0) {
+          // Seed the database with sample products
+          loadedProducts = seedDatabase();
+          toast.success("Base de datos inicializada con productos de prueba", { 
+            icon: '📦',
+            duration: 3000,
+          });
+
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error("Error loading products:", error);
+        toast.error("Error al cargar productos", { duration: 4000 });
+      } finally {
+        setLoading(false);
+      }
+    }, 500); // Simulated loading delay
+  };
+
+  useEffect(() => {
+    // Load products when component mounts
+    loadProducts();
+  }, []);
 
   if (theme_name != getThemeName()) {
     setThemeName(theme_name);
