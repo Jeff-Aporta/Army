@@ -1,0 +1,12 @@
+:root{
+  --border-section: hsl(var(--military-green-h), var(--military-green-s), 40%, 0.5);
+}
+
+.menu-top {
+  border-bottom: 3px solid var(--border-section);
+  backdrop-filter: blur(5px);
+}
+
+.footer {
+  border-top: 3px solid var(--border-section);
+}
